@@ -99,7 +99,7 @@ When your layer is an Enities layer, `layer_data` is an Array of entity Hash lik
 
 
 
-▶️ **Case of Point and Array<Point>**
+ ***Point and Array<Point>***
 
 
 ... Work in progress ...
