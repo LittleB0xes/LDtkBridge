@@ -51,21 +51,35 @@ cell_size (size of a tile, in px)
 layer_data
 ```
 
+**For Tile Layer**
 
-And some methods : 
+For tile layer, `layer_data` is an Array of Tile Hash with fields
+```ruby
+{
+	x: 	# x position on map
+	y:	# y position on map
+	sx:	# source_x on tileset
+	sy:	# source_y on tileset
+	w:	# width of the tile
+	h:	# height of the tile
+}
+```
 
-**For IntGrid Layer**
 
+**For intGrid Layer**
 
-...
+For `intGrid`, layer_data is an Array of Int
+
+You can access to an intGrid value with `my_layer.get_int(x, y)`
+
 
 **For Entities Layer**
-If your layer is a LDtk Entities type layer
+If your layer is a LDtk Entities type layer you can access to all items of a specific entity like this : `my_layer.get_all(:monster)`
 
 With LDtk, you can add some fields of data to your entities.
 
 `Point` and `Array<Point>` are usable with this bridge.
-When your layer is an Enities layer, `layer_data` is an Hash like this :
+When your layer is an Enities layer, `layer_data` is an Array of entity Hash like this :
 
 ```ruby
 {
@@ -73,6 +87,7 @@ When your layer is an Enities layer, `layer_data` is an Hash like this :
 	:pos => {x: x_of_you_entity, y: y_of_your_entity},
 	:source_rect => [sx, sy, sw, sh],				#Coordinate and dimension of your tile in the tileset
 	:fields => [{:field_1 => value}, {:field_2 => value},...]	#Array of fields
+}
 	
 ```
 
