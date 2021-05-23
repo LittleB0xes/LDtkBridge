@@ -74,7 +74,8 @@ You can access to an intGrid value with `my_layer.get_int(x, y)`
 
 
 **For Entities Layer**
-If your layer is a LDtk Entities type layer you can access to all items of a specific entity like this : `my_layer.get_all(:monster)`
+
+If your layer is a LDtk Entities type layer you can access to all items of a specific type of entity, like this : `my_layer.get_all(:monster)`
 
 With LDtk, you can add some fields of data to your entities.
 
