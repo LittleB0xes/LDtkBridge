@@ -1,6 +1,10 @@
 # LDtkBridge
 A bridge between LDtk and DragonRuby
 
+Not all possibilities of LDtk are supported, this is a work in progress. I add things to it according to my needs
+
+Currently, LDtkBridge only supports one tileset (which will evolve later)
+
 ## Usage
 
 ### LDtk project init
