@@ -3,16 +3,16 @@ A bridge between LDtk and DragonRuby
 
 ## Usage
 
-###LDtk project init
+### LDtk project init
 First you need to init your map
 
 ```ruby
 my_world = LDtk::LDtkBridge.new('your_ldtk_file.ldtk')
 ```
 
-###Loading Levels and Layers
+### Loading Levels and Layers
 
-####Levels
+#### Levels
 If in your LDtk file, your level is named "Level1", this level can be load like this
 
 ```ruby
@@ -76,4 +76,4 @@ When your layer is an Enities layer, `layer_data` is an Hash like this :
 **case of Point and Array<Point>**
 
 
-
+...
