@@ -29,7 +29,11 @@ y_world
 level_data
 ```
 #### Layers
-You can now acces to each layer of your level with the Level method `get_layer(:name_of_the_layer)`
+
+*** Important ***
+All tile and sprite coordinates use the DragonRuby standard (origin bottom left). LDtkBridge converts up-left origin to bottom-left origin
+
+You can now access to each layer of your level with the Level method `get_layer(:name_of_the_layer)`
 For a layer named "layer_one" in LDtk, do :
 
 
