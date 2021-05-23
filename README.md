@@ -49,6 +49,7 @@ layer_data
 
 
 And some methods : 
+
 **For IntGrid Layer**
 
 
@@ -66,8 +67,8 @@ When your layer is an Enities layer, `layer_data` is an Hash like this :
 {
 	:name => :identifier_of_the_entity,
 	:pos => {x: x_of_you_entity, y: y_of_your_entity},
-	:source_rect => [sx, sy, sw, sh],			#Coordinate and dimension of your tile in the tileset
-	:fields => [{:field_1 => value}, {:field_2 => value},...]						#Array of fields
+	:source_rect => [sx, sy, sw, sh],				#Coordinate and dimension of your tile in the tileset
+	:fields => [{:field_1 => value}, {:field_2 => value},...]	#Array of fields
 	
 ```
 
