@@ -1,7 +1,7 @@
 # LDtkBridge
 A bridge between LDtk and DragonRuby
 
-Not all possibilities of LDtk are supported, this is a work in progress. I add things to it according to my needs
+⚠️ Not all capabilities of LDtk are supported, this is a work in progress. I add things to it according to my needs
 
 Currently, LDtkBridge only supports one tileset (which will evolve later)
 
@@ -34,7 +34,7 @@ level_data
 ```
 #### Layers
 
-***Important***
+⚠️ ***Important***
 > All tile and sprite coordinates use the DragonRuby standard (origin bottom left). LDtkBridge converts up-left origin to bottom-left origin
 
 You can now access to each layer of your level with the Level method `get_layer(:name_of_the_layer)`
