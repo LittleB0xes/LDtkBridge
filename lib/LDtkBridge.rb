@@ -47,10 +47,13 @@ module LDtk
               name = ent["__identifier"].to_sym
 
 
-              sx = ent["__tile"]["srcRect"][0]
-              sy = @tileset[:height] - ent["__tile"]["srcRect"][1] - @tileset[:cell_size]
-              sw = ent["__tile"]["srcRect"][2]
-              sh = ent["__tile"]["srcRect"][3]
+              #  Check if tile exist for this entity
+              if ent["__tile"]
+                sx = ent["__tile"]["srcRect"][0]
+                sy = @tileset[:height] - ent["__tile"]["srcRect"][1] - @tileset[:cell_size]
+                sw = ent["__tile"]["srcRect"][2]
+                sh = ent["__tile"]["srcRect"][3]
+              end
 
               fields = Hash.new
               ent["fieldInstances"].each do |f|
