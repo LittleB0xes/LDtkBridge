@@ -73,8 +73,15 @@ class Demo
       source_h: @level_one.height,
     }
 
-    if args.inputs.keyboard.key_down.right
-      camera_x += 1
+    if args.inputs.keyboard.key_held.right
+      @camera_x += 1
+    elsif args.inputs.keyboard.key_held.left
+      @camera_x -= 1
+    end
+    if args.inputs.keyboard.key_held.up
+      @camera_y += 1
+    elsif args.inputs.keyboard.key_held.down
+      @camera_y -= 1
     end
   
     debug args
