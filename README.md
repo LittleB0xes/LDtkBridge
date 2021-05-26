@@ -1,7 +1,7 @@
 # LDtkBridge
 A bridge between LDtk and DragonRuby
 
-Not all possibilities of LDtk are supported, this is a work in progress. I add things to it according to my needs
+⚠️ Not all capabilities of LDtk are supported, this is a work in progress. I add things to it according to my needs
 
 Currently, LDtkBridge only supports one tileset (which will evolve later)
 
@@ -34,10 +34,11 @@ level_data
 ```
 #### Layers
 
-***Important***
+⚠️ ***Important***
 > All tile and sprite coordinates use the DragonRuby standard (origin bottom left). LDtkBridge converts up-left origin to bottom-left origin
 
 You can now access to each layer of your level with the Level method `get_layer(:name_of_the_layer)`
+
 For a layer named "layer_one" in LDtk, do :
 
 
@@ -55,7 +56,7 @@ cell_size (size of a tile, in px)
 layer_data
 ```
 
-**For Tile Layer**
+▶️ **Case of Tile Layer**
 
 For tile layer, `layer_data` is an Array of Tile Hash with fields
 ```ruby
@@ -70,14 +71,14 @@ For tile layer, `layer_data` is an Array of Tile Hash with fields
 ```
 
 
-**For intGrid Layer**
+▶️ **Case of intGrid Layer**
 
 For `intGrid`, layer_data is an Array of Int
 
 You can access to an intGrid value with `my_layer.get_int(x, y)`
 
 
-**For Entities Layer**
+▶️ **Case of Entities Layer**
 
 If your layer is a LDtk Entities type layer you can access to all items of a specific type of entity, like this : `my_layer.get_all(:monster)`
 
@@ -98,7 +99,7 @@ When your layer is an Enities layer, `layer_data` is an Array of entity Hash lik
 
 
 
-**case of Point and Array<Point>**
+ ***Point and Array<Point>***
 
 
-...
+... Work in progress ...
