@@ -37,6 +37,7 @@ class Demo
     args.render_target(:tiles_back).height = @level_one.height * @scale
 
     # Now, we get all tiles of "Background" layer
+
     @level_one.get_layer(:Background).layer_data.each do |t|
       tile = SampleSprite.new(t[:x], t[:y], t[:sx], t[:sy], t[:w], t[:h], 0)
 
@@ -44,7 +45,6 @@ class Demo
     end
 
     # We can now add the tile Layer
-    #
 
     @level_one.get_layer(:Tiles).layer_data.each do |t|
       tile = SampleSprite.new(t[:x], t[:y], t[:sx], t[:sy], t[:w], t[:h], 0)
@@ -52,6 +52,54 @@ class Demo
       args.render_target(:tiles_back).sprites << tile
     end
 
+    # Let's talk about Entities
+    # In this case, all entities are animated or movable
+    # So, we need to update them on each tick
+    #
+
+    # Her, we choose to use a render target for rendering, but,
+    # one more time, feel free to use what you want
+
+    # Size initialisation
+    args.render_target(:entities).width = @level_one.width * @scale
+    args.render_target(:entities).height = @level_one.height * @scale
+
+    # In an Enitities layer, we can access to all specific entities
+    # with the .get_all(entity_name) method. It returns an array
+    #
+    # For example, in LDtk file, we have a "Torch" Entity, we can do
+    @all_entities = @level_one.get_layer(:Entities).get_all(:Torch).map do |ent|
+      # In Entities Layer, all properties are store in an Hash
+      # Here, in LDtk files, Torch entity have some fields :
+      #  - a source_rect field  (a standarized fields with an array 
+      #     [sx, sy,sw, sh] if tile is assigned to the entitie
+      #     (else, source_rect = Null in LDtk and not exist in LDtkBridge)
+      #
+      #  - a pos (ie position) field (a standarized LDtk field)
+      #
+      #  And we added a custom field in our LDtk file :
+      #  - a frame field (number of frame for the animation)
+
+      # Standardized fields
+      x = ent[:pos][:x]
+      y = ent[:pos][:y]
+      sx = ent[:source_rect][0]
+      sy = ent[:source_rect][1]
+      w = ent[:source_rect][2]
+      h = ent[:source_rect][3]
+
+      # Custom fields (access to custom fields with key :field)
+      frame = ent[:fields][:frame]
+
+      SampleSprite.new(x, y, sx, sy, w, h, frame)
+       
+    end
+    
+    args.render_target(:entities).sprites << @all_entities
+
+    puts @all_entities.length
+    
+    
 
 
   end
@@ -59,6 +107,14 @@ class Demo
   def tick args
 
     args.outputs.background_color= [0,0,0]
+    
+    # Update Entities
+    @all_entities.each{|ent| ent.update args}
+    
+    # Update the entities render_target
+    args.render_target(:entities).width = @level_one.width * @scale
+    args.render_target(:entities).height = @level_one.height * @scale
+    args.render_target(:entities).sprites << @all_entities
 
     # Tiles background display
     args.outputs.sprites << {
@@ -73,6 +129,27 @@ class Demo
       source_h: @level_one.height,
     }
 
+    # Entities Layer background display
+    args.outputs.sprites << {
+      x: -@camera_x * @scale, 
+      y: -@camera_y * @scale,
+      w: @level_one.width * @scale,
+      h: @level_one.height * @scale,
+      path: :entities,
+      source_x: 0,
+      source_y: 0,
+      source_w: @level_one.width,
+      source_h: @level_one.height,
+    }
+    
+    args.outputs.labels << {
+      x: 10,
+      y: 700,
+      text: "Use arrow to move the view",
+      r: 255,
+      g: 255,
+      b: 255}
+    # move the view
     if args.inputs.keyboard.key_held.right
       @camera_x += 1
     elsif args.inputs.keyboard.key_held.left
@@ -108,8 +185,21 @@ class SampleSprite
     @source_w = sw
     @source_h = sh
 
+    @sx_o = sx
     @path = "assets/tileset.png"
 
+    @max_frame = frame
+    @current_framerate = 0
+  end
+
+  def update args
+    if args.tick_count % 8 == 0
+      @current_frame += 1
+      if @current_frame >= @max_frame
+        @current_frame = 0
+      end
+    end 
+    @source_x = @sx_o + @current_frame * @w
   end
 end
 
