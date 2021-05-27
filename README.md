@@ -5,6 +5,11 @@ A bridge between LDtk and DragonRuby
 
 Currently, LDtkBridge only supports one tileset (which will evolve later)
 
+## Sample app
+There is now a sample app. This is very basic and not optimized. The purpose of this app is just to show how to use some LDtkBrige functions.
+
+
+
 ## Usage
 
 ### LDtk project init
