@@ -129,7 +129,7 @@ class Demo
       source_h: @level_one.height,
     }
 
-    # Entities Layer background display
+    # Entities Layer display
     args.outputs.sprites << {
       x: -@camera_x * @scale, 
       y: -@camera_y * @scale,
@@ -145,6 +145,8 @@ class Demo
     args.outputs.labels << [10,700,"Use arrow to move the view",255,255,255]
     args.outputs.labels << [10,680,"Hit a to reset",255,255,255]
     args.outputs.labels << [10,660,"x/c for zoom/dezoom",255,255,255]
+
+
     # In this sample, you can move the view (the camera) with arrow key
     #
     if args.inputs.keyboard.key_held.right
