@@ -142,14 +142,11 @@ class Demo
       source_h: @level_one.height,
     }
     
-    args.outputs.labels << {
-      x: 10,
-      y: 700,
-      text: "Use arrow to move the view",
-      r: 255,
-      g: 255,
-      b: 255}
-    # move the view
+    args.outputs.labels << [10,700,"Use arrow to move the view",255,255,255]
+    args.outputs.labels << [10,680,"Hit a to reset",255,255,255]
+    args.outputs.labels << [10,660,"x/c for zoom/dezoom",255,255,255]
+    # In this sample, you can move the view (the camera) with arrow key
+    #
     if args.inputs.keyboard.key_held.right
       @camera_x += 1
     elsif args.inputs.keyboard.key_held.left
@@ -160,19 +157,23 @@ class Demo
     elsif args.inputs.keyboard.key_held.down
       @camera_y -= 1
     end
-  
-    debug args
-  end
 
-  def debug args
+    if args.inputs.keyboard.key_held.x
+      @scale += 0.1 if @scale < 10
+    elsif args.inputs.keyboard.key_held.c
+      @scale -= 0.1 if @scale >= 1
+    end
+
     if args.inputs.keyboard.key_down.a
       $gtk.reset
     end
+      
+  
   end
-
 
 end
 
+# This is a very archaïc and simple sprite class, just for the sample
 class SampleSprite
   attr_sprite
   def initialize x, y, sx, sy, sw, sh, frame
