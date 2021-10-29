@@ -205,7 +205,7 @@ class SampleSprite
     @path = "assets/tileset.png"
 
     @max_frame = frame
-    @current_framerate = 0
+    @current_frame = 0
   end
 
   def update args

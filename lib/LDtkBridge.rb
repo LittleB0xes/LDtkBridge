@@ -68,8 +68,13 @@ module LDtk
 
               #  Check if tile exist for this entity
               if ent["__tile"]
+
+                #Tileset Id is usefull if we use tile to represent an entitie
+                tileset_id = ent["__tile"]["tilesetUid"]
+
+                # Enttitie sprite position in tileset
                 sx = ent["__tile"]["srcRect"][0]
-                sy = @tileset[:height] - ent["__tile"]["srcRect"][1] - @tileset[:cell_size]
+                sy = @tilesets[tileset_id][:height] - ent["__tile"]["srcRect"][1] - @tilesets[tileset_id][:cell_size]
                 sw = ent["__tile"]["srcRect"][2]
                 sh = ent["__tile"]["srcRect"][3]
               end
@@ -232,6 +237,18 @@ module LDtk
       else
         nil
       end
+    end
+
+    def serialize
+      {}
+    end
+
+    def inspect
+      serialize.to_s
+    end
+
+    def to_s
+      serialize.to_s
     end
   end
 end
