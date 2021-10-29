@@ -131,6 +131,18 @@ module LDtk
       # Return the first (and unique level) with the good name
       @levels.select{|level| level.name == name}[0]
     end
+
+    def serialize
+      {tileset: @tileset, levels: @levels}
+    end
+
+    def inspect
+      serialize.to_s
+    end
+
+    def to_s
+      serialize.to_s
+    end
   end
 
   class Level
@@ -147,6 +159,17 @@ module LDtk
     def get_layer name
       @level_data.select{|layer| layer.name == name}[0]
 
+    end
+    def serialize
+      {width: @width, height: @height, x: @x_world, y: @y_world, level_data: @level_data}
+    end
+
+    def inspect
+      serialize.to_s
+    end
+
+    def to_s
+      serialize.to_s
     end
   end
 

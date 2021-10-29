@@ -173,6 +173,19 @@ class Demo
   
   end
 
+  def serialize
+    {scale: @scale, world: @world }
+  end
+
+  def inspect
+    serialize.to_s
+  end
+
+  def to_s
+    serialize.to_s
+  end
+
+
 end
 
 # This is a very archaïc and simple sprite class, just for the sample
