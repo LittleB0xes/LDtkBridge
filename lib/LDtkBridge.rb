@@ -1,16 +1,29 @@
 module LDtk
   class LDtkBridge
-    attr_reader :levels, :tileset
+    attr_reader :levels,
+                :tileset,
+                :tilesets
+
     def initialize file_name
+
       @ldtk_file = $gtk.parse_json_file(file_name)
       tSet = @ldtk_file["defs"]["tilesets"][0]
-
+      @tilesets = {}
+      @ldtk_file["defs"]["tilesets"].each do |tileset|
+        @tilesets[tileset["uid"]]= {
+          :width => tileset["pxWid"],
+          :height => tileset["pxHei"],
+          :cell_size => tileset["tileGridSize"],
+          :identifier => tileset["identifier"].to_sym,
+          :rel_path => tileset["relPath"]
+        }
+      end
       # Tileset information
-      @tileset = {
-        :width => tSet["pxWid"],
-        :height => tSet["pxHei"],
-        :cell_size => tSet["tileGridSize"]
-    }
+      # @tileset = {
+      #   :width => tSet["pxWid"],
+      #   :height => tSet["pxHei"],
+      #   :cell_size => tSet["tileGridSize"]
+      # }
 
       # Levels data generation
       # All data must be adapted with DragonRuby coordinate system
@@ -21,23 +34,29 @@ module LDtk
         level_data = level["layerInstances"].map do |layer|
 
           # common layer data
-          cell_width = layer["__cWid"],
-          cell_height = layer["__cHei"],
-          cell_size = layer["__gridSize"],
-          layer_data = []
+          cell_width = layer["__cWid"]
+          cell_height = layer["__cHei"]
+          cell_size = layer["__gridSize"]
+          layer_data = Array.new()
           layer_type = :none
+          tileset_id = nil
+          tileset_path = nil
 
           case layer["__type"]
           when "Tiles"
             layer_type = :tiles
+            tileset_id = layer["__tilesetDefUid"]
+            tileset_path = @tilesets[tileset_id][:rel_path]
+            tileset_path = tileset_path[2, tileset_path.length]
+            tileset = @tilesets[tileset_id]
             layer_data = layer["gridTiles"].map do |tile|
               sx = tile["src"][0]
-              sy = @tileset[:height] - tile["src"][1] - @tileset[:cell_size]
+              sy = tileset[:height] - tile["src"][1] - tileset[:cell_size]
               x = tile["px"][0]
               y = cell_height * cell_size - tile["px"][1] - cell_size
 
 
-              {x: x, y: y, sx: sx, sy: sy, w: @tileset[:cell_size], h: @tileset[:cell_size]}
+              {x: x, y: y, sx: sx, sy: sy, w: tileset[:cell_size], h: tileset[:cell_size]}
             end
           when "Entities"
             layer_type = :entities
@@ -98,13 +117,17 @@ module LDtk
             layer_data = Array.new(layer["intGridCsv"].length)
             layer["intGridCsv"].each_with_index do |v, i|
               x = i % layer["__cWid"]
-              y = cell_height - 1 - i.div(layer["__cHei"])
-              layer_data[x + y * layer["__cWid"]] = v
+              #y = cell_height - 1 - i.div(layer["__cHei"])
+              y = i.div(layer["__cWid"])
+
+              layer_data[x + (cell_height - 1 - y) * layer["__cWid"]] = v
       
             end
             layer_data
           end
           Layer.new(
+            tileset_id,
+            tileset_path,
             layer_type,
             layer["__identifier"].to_sym,
             layer["__cWid"],
@@ -128,7 +151,6 @@ module LDtk
     end
 
     def get_level name
-      # Return the first (and unique level) with the good name
       @levels.select{|level| level.name == name}[0]
     end
 
@@ -175,11 +197,14 @@ module LDtk
 
   class Layer
     attr_accessor :name,
-                  :cell_width, 
-                  :cell_height, 
-                  :cell_size, 
-                  :layer_data
-    def initialize l_type, name, cw,ch, size, data
+                  :cell_width,
+                  :cell_height,
+                  :cell_size,
+                  :layer_data,
+                  :tileset_id
+    def initialize tileset_id, path, l_type, name, cw,ch, size, data
+      @tileset_id = tileset_id
+      @tileset_path = path
       @type = l_type
       @name = name
       @cell_width = cw 
@@ -187,6 +212,11 @@ module LDtk
       @cell_size = size
       @layer_data = data
     end
+
+    def get_tileset_path
+      @tileset_path
+    end
+      
 
     def get_all entity_type
       if @type == :entities
