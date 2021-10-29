@@ -3,7 +3,7 @@ A bridge between LDtk and DragonRuby
 
 ⚠️ Not all capabilities of LDtk are supported, this is a work in progress. I add things to it according to my needs
 
-Currently, LDtkBridge only supports one tileset (which will evolve later)
+~~Currently~~ Now, LDtkBridge ~~only supports one tileset (which will evolve later)~~ several tilesets, but it still a work in progress...
 
 ## Sample app
 There is now a sample app. This is very basic and not optimized. The purpose of this app is just to show how to use some LDtkBrige functions.
