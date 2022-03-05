@@ -55,9 +55,28 @@ module LDtk
               x = tile["px"][0]
               y = cell_height * cell_size - tile["px"][1] - cell_size
               f = tile["f"]
+              v_flip = false
+              h_flip = false
+              case f
+              when 0
+                v_flip = false
+                h_flip = false
+              when 1
+                v_flip = false
+                h_flip = true
+              when 2
+                v_flip = true
+                h_flip = false
+              when 3
+                v_flip = true
+                h_flip = true
+              end
 
 
-              {x: x, y: y, sx: sx, sy: sy, w: tileset[:cell_size], h: tileset[:cell_size], f: f}
+
+
+
+              {x: x, y: y, sx: sx, sy: sy, w: tileset[:cell_size], h: tileset[:cell_size], f: f, flip_vertically: v_flip, flip_horizontally: h_flip}
             end
           when "Entities"
             layer_type = :entities

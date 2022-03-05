@@ -41,6 +41,11 @@ class Demo
 
     @level_one.get_layer(:Background).layer_data.each do |t|
       tile = SampleSprite.new(t[:x], t[:y], t[:sx], t[:sy], t[:w], t[:h], 0)
+      
+      # Each tile in layer_data has a flip_horizontally/vertically field
+      # then, you can use it directly with sprite (and attr_sprite class attribute) in DragonRuby
+      tile.flip_vertically = t[:flip_vertically]
+      tile.flip_horizontally = t[:flip_horizontally]
 
       args.render_target(:tiles_back).sprites << tile
     end
@@ -50,6 +55,10 @@ class Demo
     @level_one.get_layer(:Tiles).layer_data.each do |t|
       tile = SampleSprite.new(t[:x], t[:y], t[:sx], t[:sy], t[:w], t[:h], 0)
 
+      # Each tile in layer_data has a flip_horizontally/vertically field
+      # then, you can use it directly with sprite (and attr_sprite class attribute) in DragonRuby
+      tile.flip_vertically = t[:flip_vertically]
+      tile.flip_horizontally = t[:flip_horizontally]
       args.render_target(:tiles_back).sprites << tile
     end
 
