@@ -1,7 +1,7 @@
 # LDtkBridge
 A bridge between LDtk and DragonRuby
 
-⚠️ Not all capabilities of LDtk are supported, this is a work in progress. I add things to it according to my needs
+⚠️ Not all capabilities of LDtk 0.9.3 are supported, this is a work in progress. I add things to it according to my needs
 
 ~~Currently~~ Now, LDtkBridge ~~only supports one tileset (which will evolve later)~~ several tilesets, but it still a work in progress...
 
@@ -66,13 +66,13 @@ layer_data
 For tile layer, `layer_data` is an Array of Tile Hash with fields
 ```ruby
 {
-	x: 					# x position on map
-	y:					# y position on map
-	sx:					# source_x on tileset
-	sy:					# source_y on tileset
-	w:					# width of the tile
-	h:					# height of the tile
-	f:					# flip poperty (0 = none, 1 = h_flip, 2 = v_flip, 3 = both)
+	x: 			# x position on map
+	y:			# y position on map
+	sx:			# source_x on tileset
+	sy:			# source_y on tileset
+	w:			# width of the tile
+	h:			# height of the tile
+	f:			# flip poperty (0 = none, 1 = h_flip, 2 = v_flip, 3 = both)
 	flip_vertically:	# true or false (flip property but adapted for DragonRuby convenience)
 	flip_horizontally:	# true or false (flip property but adapted for DragonRuby convenience)
 }
