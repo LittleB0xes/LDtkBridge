@@ -2,7 +2,8 @@ require 'lib/LDtkBridge.rb'
 
 
 class Demo
-  attr_accessor :world
+  attr_accessor :world,
+                :level_one
   def initialize args
     @scale = 4
     # set a very basic camera, just  for the sample, to move on the map
@@ -52,6 +53,7 @@ class Demo
       args.render_target(:tiles_back).sprites << tile
     end
 
+
     # Let's talk about Entities
     # In this case, all entities are animated or movable
     # So, we need to update them on each tick
@@ -94,6 +96,8 @@ class Demo
       SampleSprite.new(x, y, sx, sy, w, h, frame)
        
     end
+
+    
     
     args.render_target(:entities).sprites << @all_entities
 
@@ -141,7 +145,18 @@ class Demo
       source_w: @level_one.width,
       source_h: @level_one.height,
     }
-    
+    # FourFour Layer display
+    args.outputs.sprites << {
+      x: -@camera_x * @scale, 
+      y: -@camera_y * @scale,
+      w: @level_one.width * @scale,
+      h: @level_one.height * @scale,
+      path: :entities,
+      source_x: 0,
+      source_y: 0,
+      source_w: @level_one.width,
+      source_h: @level_one.height,
+    } 
     args.outputs.labels << [10,700,"Use arrow to move the view",255,255,255]
     args.outputs.labels << [10,680,"Hit a to reset",255,255,255]
     args.outputs.labels << [10,660,"x/c for zoom/dezoom",255,255,255]

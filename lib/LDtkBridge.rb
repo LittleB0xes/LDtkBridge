@@ -54,9 +54,10 @@ module LDtk
               sy = tileset[:height] - tile["src"][1] - tileset[:cell_size]
               x = tile["px"][0]
               y = cell_height * cell_size - tile["px"][1] - cell_size
+              f = tile["f"]
 
 
-              {x: x, y: y, sx: sx, sy: sy, w: tileset[:cell_size], h: tileset[:cell_size]}
+              {x: x, y: y, sx: sx, sy: sy, w: tileset[:cell_size], h: tileset[:cell_size], f: f}
             end
           when "Entities"
             layer_type = :entities
