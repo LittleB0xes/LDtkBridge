@@ -1,7 +1,8 @@
 # LDtkBridge
 A bridge between LDtk and DragonRuby
 
-⚠️ Not all capabilities of LDtk 0.9.3 are supported, this is a work in progress. I add things to it according to my needs
+⚠️ Not all capabilities of LDtk 0.9.3 are supported, this is a work in progress. I add things to it according to my needs.
+Migration to 1.1.x is in progress
 
 ~~Currently~~ Now, LDtkBridge ~~only supports one tileset (which will evolve later)~~ several tilesets, but it still a work in progress...
 
@@ -76,6 +77,19 @@ For tile layer, `layer_data` is an Array of Tile Hash with fields
 	flip_vertically:	# true or false (flip property but adapted for DragonRuby convenience)
 	flip_horizontally:	# true or false (flip property but adapted for DragonRuby convenience)
 }
+```
+
+
+⚠️ New and temporary name method
+
+
+Tile layer class have a DragonRuby friendly method to return an array of hash of all the tiles of the layer, directly usable, temporary called `get_all_scaled_tiles(scale, translation_on_x, translation_on_y)`. 
+
+Default value are scale = 1', translation_on_xy = 0
+
+example :
+```ruby
+args.outputs.sprites.sprites << @ground_layer.get_all_scaled_tiles(4, camera_x, camera_y)
 ```
 
 
