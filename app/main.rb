@@ -64,9 +64,9 @@ class Demo
     #  args.render_target(:tiles_back).sprites << tile
     #end
     #
-    # Or use the get_all_scaled_tiles method
+    # Or use the render method
 
-    args.render_target(:tiles_back).sprites << @level_one.get_layer(:Tiles).get_all_scaled_tiles
+    args.render_target(:tiles_back).sprites << @level_one.get_layer(:Tiles).render
 
 
     # Let's talk about Entities

@@ -80,16 +80,14 @@ For tile layer, `layer_data` is an Array of Tile Hash with fields
 ```
 
 
-⚠️ New and temporary name method
 
-
-Tile layer class have a DragonRuby friendly method to return an array of hash of all the tiles of the layer, directly usable, temporary called `get_all_scaled_tiles(scale, translation_on_x, translation_on_y)`. 
+Tile layer class also have a DragonRuby friendly method to return an array of hash of all the tiles of the layer, directly usable, called `render(scale, translation_on_x, translation_on_y)`. 
 
 Default value are scale = 1', translation_on_xy = 0
 
 example :
 ```ruby
-args.outputs.sprites.sprites << @ground_layer.get_all_scaled_tiles(4, camera_x, camera_y)
+args.outputs.sprites.sprites << @ground_layer.render(4, camera_x, camera_y)
 ```
 
 

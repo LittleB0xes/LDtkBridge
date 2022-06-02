@@ -271,7 +271,7 @@ module LDtk
     # arguments :
     # scale to scale the tile
     # dx and dy for an optional camera translation
-    def get_all_scaled_tiles(scale=1, dx=0, dy=0)
+    def render(scale=1, dx=0, dy=0)
       return unless @type == :tiles
       @layer_data.map do |tile|
         {
@@ -286,7 +286,6 @@ module LDtk
           path: @folder + @tileset_path,
           flip_horizontally: tile.flip_horizontally,
           flip_vertically: tile.flip_vertically,
-
         }
       end
 
