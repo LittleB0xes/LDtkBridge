@@ -4,9 +4,10 @@ module LDtk
                 :tileset,
                 :tilesets
 
-    def initialize file_name
+    def initialize(folder, file_name)
 
-      @ldtk_file = $gtk.parse_json_file(file_name)
+      @ldtk_file = $gtk.parse_json_file(folder+file_name)
+      @folder = folder
       tSet = @ldtk_file["defs"]["tilesets"][0]
       @tilesets = {}
       @ldtk_file["defs"]["tilesets"].each do |tileset|
@@ -47,7 +48,7 @@ module LDtk
             layer_type = :tiles
             tileset_id = layer["__tilesetDefUid"]
             tileset_path = @tilesets[tileset_id][:rel_path]
-            tileset_path = tileset_path[2, tileset_path.length]
+            #tileset_path = tileset_path[2, tileset_path.length]
             tileset = @tilesets[tileset_id]
             layer_data = layer["gridTiles"].map do |tile|
               sx = tile["src"][0]
@@ -152,6 +153,7 @@ module LDtk
           end
           Layer.new(
             tileset_id,
+            @folder,
             tileset_path,
             layer_type,
             layer["__identifier"].to_sym,
@@ -226,10 +228,15 @@ module LDtk
                   :cell_height,
                   :cell_size,
                   :layer_data,
-                  :tileset_id
-    def initialize tileset_id, path, l_type, name, cw,ch, size, data
+                  :tileset_id,
+                  :tileset_path
+    def initialize tileset_id, folder, path, l_type, name, cw,ch, size, data
       @tileset_id = tileset_id
+
+      @folder = folder
+      # Relative path of the tileset
       @tileset_path = path
+
       @type = l_type
       @name = name
       @cell_width = cw 
@@ -245,7 +252,7 @@ module LDtk
 
     def get_all entity_type
       if @type == :entities
-        layer_data.select{|element| element[:name] == entity_type}
+        @layer_data.select{|element| element[:name] == entity_type}
       else
         []
       end
@@ -258,6 +265,34 @@ module LDtk
         nil
       end
     end
+
+    # get_all_scaled_tiles generate a DragonRuby hash sprite array which
+    # can be use directly in outputs.sprites or outputs.static_sprite
+    # arguments :
+    # scale to scale the tile
+    # dx and dy for an optional camera translation
+    def get_all_scaled_tiles(scale=1, dx=0, dy=0)
+      return unless @type == :tiles
+      @layer_data.map do |tile|
+        {
+          x: (tile.x - dx) * scale,
+          y: (tile.y - dy) * scale,
+          w: tile.w * scale,
+          h: tile.h * scale,
+          source_x: tile.sx,
+          source_y: tile.sy,
+          source_w: tile.w,
+          source_h: tile.h,
+          path: @folder + @tileset_path,
+          flip_horizontally: tile.flip_horizontally,
+          flip_vertically: tile.flip_vertically,
+
+        }
+      end
+
+    end
+
+
 
     def serialize
       {}
