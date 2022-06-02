@@ -17,7 +17,7 @@ There is now a sample app. This is very basic and not optimized. The purpose of 
 First you need to init your map
 
 ```ruby
-my_world = LDtk::LDtkBridge.new('your_ldtk_file.ldtk')
+my_world = LDtk::LDtkBridge.new('path_to_your_file/', 'your_ldtk_file.ldtk')
 ```
 
 ### Loading Levels and Layers
