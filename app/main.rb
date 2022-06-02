@@ -12,7 +12,7 @@ class Demo
 
 
     # World initialisation
-    @world = LDtk::LDtkBridge.new('assets/level.ldtk')
+    @world = LDtk::LDtkBridge.new('assets/', 'level.ldtk')
 
     # Load the first level named "Level1" in LDtk
     @level_one = @world.get_level(:Level1)
