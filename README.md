@@ -111,6 +111,8 @@ When your layer is an Enities layer, `layer_data` is an Array of entity Hash lik
 {
 	:name => :identifier_of_the_entity,
 	:pos => {x: x_of_you_entity, y: y_of_your_entity},
+	:size => {w: width_of entity, h: height_of_entity},
+	:pivot =>{x: 0_to_1_value, y: 0_to_1_value},
 	:source_rect => [sx, sy, sw, sh],				#Coordinate and dimension of your tile in the tileset
 	:fields => [{:field_1 => value}, {:field_2 => value},...]	#Array of fields
 }
