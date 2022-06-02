@@ -51,16 +51,22 @@ class Demo
     end
 
     # We can now add the tile Layer
+    # we can use the same technic like above
+    # with this :
+    #
+    #@level_one.get_layer(:Tiles).layer_data.each do |t|
+    #  tile = SampleSprite.new(t[:x], t[:y], t[:sx], t[:sy], t[:w], t[:h], 0)
 
-    @level_one.get_layer(:Tiles).layer_data.each do |t|
-      tile = SampleSprite.new(t[:x], t[:y], t[:sx], t[:sy], t[:w], t[:h], 0)
+    #  # Each tile in layer_data has a flip_horizontally/vertically field
+    #  # then, you can use it directly with sprite (and attr_sprite class attribute) in DragonRuby
+    #  tile.flip_vertically = t[:flip_vertically]
+    #  tile.flip_horizontally = t[:flip_horizontally]
+    #  args.render_target(:tiles_back).sprites << tile
+    #end
+    #
+    # Or use the get_all_scaled_tiles method
 
-      # Each tile in layer_data has a flip_horizontally/vertically field
-      # then, you can use it directly with sprite (and attr_sprite class attribute) in DragonRuby
-      tile.flip_vertically = t[:flip_vertically]
-      tile.flip_horizontally = t[:flip_horizontally]
-      args.render_target(:tiles_back).sprites << tile
-    end
+    args.render_target(:tiles_back).sprites << @level_one.get_layer(:Tiles).get_all_scaled_tiles
 
 
     # Let's talk about Entities
