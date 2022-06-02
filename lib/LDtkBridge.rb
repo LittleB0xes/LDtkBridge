@@ -82,8 +82,15 @@ module LDtk
           when "Entities"
             layer_type = :entities
             layer_data = layer["entityInstances"].map do |ent|
-              pos_x = ent["px"][0]
-              pos_y = cell_height * cell_size - ent["px"][1] - cell_size
+              
+              pivot_x = ent["__pivot"][0]
+              pivot_y = ent["__pivot"][1]
+
+              width = ent["width"]
+              height = ent["height"]
+              pos_x = ent["px"][0] - pivot_x * width
+              pos_y = cell_height * cell_size - ent["px"][1] - (1 - pivot_y) * height#cell_size
+              
               name = ent["__identifier"].to_sym
 
 
@@ -131,6 +138,8 @@ module LDtk
               {
                 :name => name,
                 :pos => {x: pos_x, y: pos_y},
+                :pivot => {x: pivot_x, y: 1 - pivot_y},
+                :size => {w: width, h: height},
                 :source_rect => [sx, sy, sw,sh],
                 :fields => fields,                # Fields are Hash
               }
