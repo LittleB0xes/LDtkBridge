@@ -82,6 +82,8 @@ module LDtk
           when "Entities"
             layer_type = :entities
             layer_data = layer["entityInstances"].map do |ent|
+
+              tileset_path = ""
               
               pivot_x = ent["__pivot"][0]
               pivot_y = ent["__pivot"][1]
@@ -100,11 +102,17 @@ module LDtk
                 #Tileset Id is usefull if we use tile to represent an entitie
                 tileset_id = ent["__tile"]["tilesetUid"]
 
+                # DragonRuby friendly path of the tileset
+                tileset_path = @folder + @tilesets[tileset_id][:rel_path]
+
                 # Enttitie sprite position in tileset
-                sx = ent["__tile"]["srcRect"][0]
-                sy = @tilesets[tileset_id][:height] - ent["__tile"]["srcRect"][1] - @tilesets[tileset_id][:cell_size]
-                sw = ent["__tile"]["srcRect"][2]
-                sh = ent["__tile"]["srcRect"][3]
+                sx = ent["__tile"]["x"]
+
+                # ... and we need to change y position to be DragonRuby friendly
+                sy = @tilesets[tileset_id][:height] - ent["__tile"]["y"] - ent["__tile"]["h"]
+                
+                sw = ent["__tile"]["w"]
+                sh = ent["__tile"]["h"]
               end
 
               fields = Hash.new
@@ -140,7 +148,7 @@ module LDtk
                 :pos => {x: pos_x, y: pos_y},
                 :pivot => {x: pivot_x, y: 1 - pivot_y},
                 :size => {w: width, h: height},
-                :source_rect => [sx, sy, sw,sh],
+                :source_rect => {source_x: sx, source_y: sy, source_w: sw, source_h: sh, path: tileset_path },
                 :fields => fields,                # Fields are Hash
               }
 

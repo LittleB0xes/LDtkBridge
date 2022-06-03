@@ -4,7 +4,7 @@ A bridge between LDtk and DragonRuby
 ⚠️ Not all capabilities of LDtk 0.9.3 are supported, this is a work in progress. I add things to it according to my needs.
 Migration to 1.1.x is in progress
 
-~~Currently~~ Now, LDtkBridge ~~only supports one tileset (which will evolve later)~~ several tilesets, but it still a work in progress...
+LDtkBridge *seems* to supports several tilesets (normally...)
 
 ## Sample app
 There is now a sample app. This is very basic and not optimized. The purpose of this app is just to show how to use some LDtkBrige functions.
@@ -113,7 +113,14 @@ When your layer is an Enities layer, `layer_data` is an Array of entity Hash lik
 	:pos => {x: x_of_you_entity, y: y_of_your_entity}, 	# Position uses pivot defines in LDtk
 	:size => {w: width_of entity, h: height_of_entity},
 	:pivot =>{x: 0_to_1_value, y: 0_to_1_value},
-	:source_rect => [sx, sy, sw, sh],				#Coordinate and dimension of your tile in the tileset
+
+	:source_rect => {...},	# Tile source data in hash with DR-friendly keys :
+							# 		:source_x
+							# 		:source_y
+							# 		:source_w
+							# 		:source_h
+							# 		:path
+
 	:fields => [{:field_1 => value}, {:field_2 => value},...]	#Array of fields
 }
 	
