@@ -62,7 +62,7 @@ cell_size (size of a tile, in px)
 layer_data
 ```
 
-▶️ **Case of Tile Layer**
+## Case of Tile Layer
 
 For tile layer, `layer_data` is an Array of Tile Hash with fields
 ```ruby
@@ -91,14 +91,14 @@ args.outputs.sprites.sprites << @ground_layer.render(4, camera_x, camera_y)
 ```
 
 
-▶️ **Case of intGrid Layer**
+## Case of intGrid Layer
 
 For `intGrid`, layer_data is an Array of Int
 
 You can access to an intGrid value with `my_layer.get_int(x, y)`
 
 
-▶️ **Case of Entities Layer**
+## Case of Entities Layer
 
 If your layer is a LDtk Entities type layer you can access to all items of a specific type of entity, like this : `my_layer.get_all(:monster)`
 
@@ -127,8 +127,23 @@ When your layer is an Enities layer, `layer_data` is an Array of entity Hash lik
 ```
 
 
+### Fields types
 
- ***Point and Array<Point>***
+#### Classical Types
 
+For classic fields types (ie. Integer, Float, Boolean, String, Text and FilePath), you get the value with the expected type.
 
-... Work in progress ...
+### Tile
+	...
+
+### Point
+	...
+
+### Color
+	...
+
+### Enum
+	...
+
+### EntityRef
+	...
