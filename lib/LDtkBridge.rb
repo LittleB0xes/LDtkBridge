@@ -7,7 +7,13 @@ module LDtk
     def initialize(folder, file_name)
 
       @ldtk_file = $gtk.parse_json_file(folder+file_name)
+
+      # Default naming convention for LDtk's exporting layer as png
+      @png_folder = folder + file_name.gsub(".ldtk", "") + "/png/"
+
+      # Folder of the ldrk file
       @folder = folder
+
       tSet = @ldtk_file["defs"]["tilesets"][0]
       @tilesets = {}
       @ldtk_file["defs"]["tilesets"].each do |tileset|
@@ -19,6 +25,8 @@ module LDtk
           :rel_path => tileset["relPath"]
         }
       end
+
+      
       # Tileset information
       # @tileset = {
       #   :width => tSet["pxWid"],
@@ -34,6 +42,8 @@ module LDtk
 
         level_data = level["layerInstances"].map do |layer|
 
+          png_path = nil
+
           # common layer data
           cell_width = layer["__cWid"]
           cell_height = layer["__cHei"]
@@ -45,6 +55,7 @@ module LDtk
 
           case layer["__type"]
           when "Tiles"
+            png_path = @png_folder + level["identifier"] + "__" + layer["__identifier"] + ".png"
             layer_type = :tiles
             tileset_id = layer["__tilesetDefUid"]
             tileset_path = @tilesets[tileset_id][:rel_path]
@@ -110,7 +121,7 @@ module LDtk
 
                 # ... and we need to change y position to be DragonRuby friendly
                 sy = @tilesets[tileset_id][:height] - ent["__tile"]["y"] - ent["__tile"]["h"]
-                
+
                 sw = ent["__tile"]["w"]
                 sh = ent["__tile"]["h"]
               end
@@ -158,6 +169,8 @@ module LDtk
           when "IntGrid"
             layer_type = :intGrid
             layer_data = Array.new(layer["intGridCsv"].length)
+
+            # Reworded Intgrid to fit the Dragonruby coordinate system
             layer["intGridCsv"].each_with_index do |v, i|
               x = i % layer["__cWid"]
               #y = cell_height - 1 - i.div(layer["__cHei"])
@@ -177,7 +190,8 @@ module LDtk
             layer["__cWid"],
             cell_height,
             cell_size, 
-            layer_data
+            layer_data,
+            png_path
 
           )
 
@@ -189,7 +203,7 @@ module LDtk
           level["worldX"],
           level["worldY"],
           level_data
-          )
+        )
 
       end
     end
@@ -247,12 +261,15 @@ module LDtk
                   :layer_data,
                   :tileset_id,
                   :tileset_path
-    def initialize tileset_id, folder, path, l_type, name, cw,ch, size, data
-      @tileset_id = tileset_id
+    def initialize tileset_id, folder, path, l_type, name, cw,ch, size, data, png_path
 
+      # folder where the .ldtk file is located
       @folder = folder
+
       # Relative path of the tileset
       @tileset_path = path
+
+      #@path = folder + path
 
       @type = l_type
       @name = name
@@ -260,6 +277,7 @@ module LDtk
       @cell_height = ch 
       @cell_size = size
       @layer_data = data
+      @png_path = png_path
     end
 
     def get_tileset_path
@@ -283,6 +301,40 @@ module LDtk
       end
     end
 
+
+    # This method is useful to render png exported tile layer in LDtk
+    # it use the default naming convention of LDtk
+    def render_png(scale=1, dx=0, dy=0)
+      return unless @type == :tiles
+
+      {
+        x: -dx * scale,
+        y: -dy * scale,
+        w: @cell_width * @cell_size * scale,
+        h: @cell_height * @cell_size * scale,
+        path: @png_path,
+        source_x: 0,
+        source_y: 0,
+        source_w: @cell_width * @cell_size,
+        source_h: @cell_height * @cell_size
+      }
+    end
+    
+    def render_rect_png(cx, cy, width, height, scale=1, dx=0, dy=0)
+      cx = 0 if cx < 0
+      
+      {
+        x: (cx - dx) * scale,
+        y: (cy-dy) * scale,
+        w: width * scale,
+        h: height * scale,
+        path: @png_path,
+        source_x: cx,
+        source_y: cy,
+        source_w: width,
+        source_h: height
+      }
+    end
     # get_all_scaled_tiles generate a DragonRuby hash sprite array which
     # can be use directly in outputs.sprites or outputs.static_sprite
     # arguments :
@@ -290,6 +342,7 @@ module LDtk
     # dx and dy for an optional camera translation
     def render(scale=1, dx=0, dy=0)
       return unless @type == :tiles
+      tileset_path = @folder + @tileset_path
       @layer_data.map do |tile|
         {
           x: (tile.x - dx) * scale,
@@ -300,10 +353,35 @@ module LDtk
           source_y: tile.sy,
           source_w: tile.w,
           source_h: tile.h,
-          path: @folder + @tileset_path,
+          path: tileset_path,
           flip_horizontally: tile.flip_horizontally,
           flip_vertically: tile.flip_vertically,
         }
+      end
+
+
+    end
+
+    def render_rect(cx, cy, width, height, scale=1, dx=0, dy=0)
+      return unless @type == :tiles
+
+      tileset_path = @folder + @tileset_path
+      window = {x: cx, y: cy, w: width, h: height}
+      @layer_data.select{|tile| tile.inside_rect?(window)}.map do |tile|
+        {
+          x: (tile.x - dx) * scale,
+          y: (tile.y - dy) * scale,
+          w: tile.w * scale,
+          h: tile.h * scale,
+          source_x: tile.sx,
+          source_y: tile.sy,
+          source_w: tile.w,
+          source_h: tile.h,
+          path: tileset_path,
+          flip_horizontally: tile.flip_horizontally,
+          flip_vertically: tile.flip_vertically,
+        }
+
       end
 
     end
