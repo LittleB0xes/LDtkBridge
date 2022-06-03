@@ -13,6 +13,7 @@ There is now a sample app. This is very basic and not optimized. The purpose of 
 
 ## Usage
 
+
 ### LDtk project init
 First you need to init your map
 
@@ -21,6 +22,7 @@ my_world = LDtk::LDtkBridge.new('path_to_your_file/', 'your_ldtk_file.ldtk')
 ```
 
 ### Loading Levels and Layers
+
 
 #### Levels
 If in your LDtk file, your level is named "Level1", this level can be load like this
@@ -38,6 +40,10 @@ x_world
 y_world
 level_data
 ```
+
+
+
+
 #### Layers
 
 ⚠️ ***Important***
@@ -62,6 +68,10 @@ cell_size (size of a tile, in px)
 layer_data
 ```
 
+
+
+
+
 ## Case of Tile Layer
 
 For tile layer, `layer_data` is an Array of Tile Hash with fields
@@ -79,16 +89,26 @@ For tile layer, `layer_data` is an Array of Tile Hash with fields
 }
 ```
 
+### Tile Layer Rendering
+For rendering, there are several method.
+
+- You can use the array `layer_data`
+
+- Tile layer class also have a DragonRuby friendly method to return an array of hash of all the tiles of the layer, directly usable, called `render(scale, translation_on_x, translation_on_y)`. Default value are scale = 1', translation_on_xy = 0
+- If you use png export in LDtk, you can use `render_png(scale, translation_on_x, translation_on_y)`. You need to keep the default value for export in LDtk
 
 
-Tile layer class also have a DragonRuby friendly method to return an array of hash of all the tiles of the layer, directly usable, called `render(scale, translation_on_x, translation_on_y)`. 
-
-Default value are scale = 1', translation_on_xy = 0
-
-example :
+### examples
 ```ruby
 args.outputs.sprites.sprites << @ground_layer.render(4, camera_x, camera_y)
+
+# or, if you want to use LDtk's png export
+args.outputs.sprites.sprites << @ground_layer.render_png(4, camera_x, camera_y)
 ```
+
+
+
+
 
 
 ## Case of intGrid Layer
@@ -96,6 +116,10 @@ args.outputs.sprites.sprites << @ground_layer.render(4, camera_x, camera_y)
 For `intGrid`, layer_data is an Array of Int
 
 You can access to an intGrid value with `my_layer.get_int(x, y)`
+
+
+
+
 
 
 ## Case of Entities Layer
