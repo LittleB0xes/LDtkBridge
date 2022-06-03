@@ -115,11 +115,11 @@ When your layer is an Enities layer, `layer_data` is an Array of entity Hash lik
 	:pivot =>{x: 0_to_1_value, y: 0_to_1_value},
 
 	:source_rect => {...},	# Tile source data in hash with DR-friendly keys :
-							# 		:source_x
-							# 		:source_y
-							# 		:source_w
-							# 		:source_h
-							# 		:path
+				# 	:source_x
+				# 	:source_y
+				# 	:source_w
+				# 	:source_h
+				# 	:path
 
 	:fields => [{:field_1 => value}, {:field_2 => value},...]	#Array of fields
 }
