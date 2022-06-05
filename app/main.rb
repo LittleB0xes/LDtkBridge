@@ -88,8 +88,8 @@ class Demo
     @all_entities = @level_one.get_layer(:Entities).get_all(:Torch).map do |ent|
       # In Entities Layer, all properties are store in an Hash
       # Here, in LDtk files, Torch entity have some fields :
-      #  - a source_rect field  (a standarized fields with an array 
-      #     [sx, sy,sw, sh] if tile is assigned to the entitie
+      #  - a source_rect field  (a standarized fields with an hash with keys :
+      #     source_x, source_y,source_w, ssource_h and path if tile is assigned to the entitie
       #     (else, source_rect = Null in LDtk and not exist in LDtkBridge)
       #
       #  - a pos (ie position) field (a standarized LDtk field)
