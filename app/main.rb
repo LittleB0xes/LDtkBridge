@@ -100,10 +100,10 @@ class Demo
       # Standardized fields
       x = ent[:pos][:x]
       y = ent[:pos][:y]
-      sx = ent[:source_rect][0]
-      sy = ent[:source_rect][1]
-      w = ent[:source_rect][2]
-      h = ent[:source_rect][3]
+      sx = ent[:source_rect][:source_x]
+      sy = ent[:source_rect][:source_y]
+      w = ent[:source_rect][:source_w]
+      h = ent[:source_rect][:source_h]
 
       # Custom fields (access to custom fields with key :field)
       frame = ent[:fields][:frame]
