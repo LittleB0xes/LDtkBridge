@@ -26,18 +26,11 @@ module LDtk
         }
       end
 
-      
-      # Tileset information
-      # @tileset = {
-      #   :width => tSet["pxWid"],
-      #   :height => tSet["pxHei"],
-      #   :cell_size => tSet["tileGridSize"]
-      # }
-
       # Levels data generation
       # All data must be adapted with DragonRuby coordinate system
       @levels = @ldtk_file["levels"].map do |level|
         level_name = level["identifier"].to_sym
+        level_iid = level["iid"].to_sym
 
 
         level_data = level["layerInstances"].map do |layer|
@@ -52,6 +45,7 @@ module LDtk
           layer_type = :none
           tileset_id = nil
           tileset_path = nil
+          layer_iid = layer["iid"].to_sym,
 
           case layer["__type"]
           when "Tiles"
@@ -94,6 +88,8 @@ module LDtk
             layer_type = :entities
             layer_data = layer["entityInstances"].map do |ent|
 
+              source_rect = nil
+
               tileset_path = ""
               
               pivot_x = ent["__pivot"][0]
@@ -105,6 +101,7 @@ module LDtk
               pos_y = cell_height * cell_size - ent["px"][1] - (1 - pivot_y) * height#cell_size
               
               name = ent["__identifier"].to_sym
+              entity_iid  = ent["iid"].to_sym
 
 
               #  Check if tile exist for this entity
@@ -124,6 +121,7 @@ module LDtk
 
                 sw = ent["__tile"]["w"]
                 sh = ent["__tile"]["h"]
+                source_rect = {source_x: sx, source_y: sy, source_w: sw, source_h: sh, path: tileset_path }
               end
 
               fields = Hash.new
@@ -155,13 +153,16 @@ module LDtk
                 fields[field_name] = field_value
               end
               {
+                :iid => entity_iid,
                 :name => name,
                 :pos => {x: pos_x, y: pos_y},
                 :pivot => {x: pivot_x, y: 1 - pivot_y},
                 :size => {w: width, h: height},
-                :source_rect => {source_x: sx, source_y: sy, source_w: sw, source_h: sh, path: tileset_path },
+                :source_rect => source_rect,
                 :fields => fields,                # Fields are Hash
               }
+
+
 
             end
 
@@ -181,7 +182,9 @@ module LDtk
             end
             layer_data
           end
+
           Layer.new(
+            layer_iid,
             tileset_id,
             @folder,
             tileset_path,
@@ -197,6 +200,7 @@ module LDtk
 
         end
         Level.new(
+          level_iid,
           level_name,
           level["pxWid"],
           level["pxHei"],
@@ -226,8 +230,9 @@ module LDtk
   end
 
   class Level
-    attr_reader :name, :width, :height, :x_world, :y_world, :level_data
-    def initialize name, w, h, x, y, data
+    attr_reader :iid, :name, :width, :height, :x_world, :y_world, :level_data
+    def initialize iid, name, w, h, x, y, data
+      @iid = iid
       @name = name
       @width = w
       @height = h 
@@ -254,14 +259,17 @@ module LDtk
   end
 
   class Layer
-    attr_accessor :name,
+    attr_accessor :iid,
+                  :name,
                   :cell_width,
                   :cell_height,
                   :cell_size,
                   :layer_data,
                   :tileset_id,
                   :tileset_path
-    def initialize tileset_id, folder, path, l_type, name, cw,ch, size, data, png_path
+    def initialize iid, tileset_id, folder, path, l_type, name, cw,ch, size, data, png_path
+
+      @iid = iid
 
       # folder where the .ldtk file is located
       @folder = folder
@@ -304,19 +312,23 @@ module LDtk
 
     # This method is useful to render png exported tile layer in LDtk
     # it use the default naming convention of LDtk
-    def render_png(scale=1, dx=0, dy=0)
+    def render_png(scale=1, dx=0, dy=0, filter={r: 1, g: 1, b:1, a: 1 })
       return unless @type == :tiles
 
       {
-        x: -dx * scale,
-        y: -dy * scale,
+        x: (-dx * scale).to_i,
+        y: (-dy * scale).to_i,
         w: @cell_width * @cell_size * scale,
         h: @cell_height * @cell_size * scale,
         path: @png_path,
         source_x: 0,
         source_y: 0,
         source_w: @cell_width * @cell_size,
-        source_h: @cell_height * @cell_size
+        source_h: @cell_height * @cell_size,
+        a: 255 * filter.a,
+        r: 255 * filter.r,
+        g: 255 * filter.g,
+        b: 255 * filter.b,
       }
     end
     
@@ -340,13 +352,13 @@ module LDtk
     # arguments :
     # scale to scale the tile
     # dx and dy for an optional camera translation
-    def render(scale=1, dx=0, dy=0)
+    def render(scale=1, dx=0, dy=0, filter={r: 1, g: 1, b:1, a: 1 })
       return unless @type == :tiles
       tileset_path = @folder + @tileset_path
       @layer_data.map do |tile|
         {
-          x: (tile.x - dx) * scale,
-          y: (tile.y - dy) * scale,
+          x: ((tile.x - dx) * scale).to_i,
+          y: ((tile.y - dy) * scale).to_i,
           w: tile.w * scale,
           h: tile.h * scale,
           source_x: tile.sx,
@@ -356,6 +368,10 @@ module LDtk
           path: tileset_path,
           flip_horizontally: tile.flip_horizontally,
           flip_vertically: tile.flip_vertically,
+          a: 255 * filter.a,
+          r: 255 * filter.r,
+          g: 255 * filter.g,
+          b: 255 * filter.b,
         }
       end
 
