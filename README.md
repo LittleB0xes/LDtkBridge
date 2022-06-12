@@ -145,7 +145,7 @@ When your layer is an Enities layer, `layer_data` is an Array of entity Hash lik
 				# 	:source_h
 				# 	:path
 
-	:fields => [{:field_1 => value}, {:field_2 => value},...]	#Array of fields
+	:fields => {:field_1 => value, :field_2 => value,...}	# Hash of fields
 }
 	
 ```
