@@ -1,8 +1,8 @@
 module LDtk
-  @camera = nil
+  DEFAULT_CAMERA = { x: 0, y: 0, scale: 4 }
 
   # Render
-  def self.render_layer(world, level_name, layer_name, camera = { x: 0, y: 0, scale: 1 })
+  def self.render_layer(world, level_name, layer_name, camera = DEFAULT_CAMERA)
     layer = layer(world, level_name, layer_name)
     tileset_path = world.folder + layer.tileset_rel_path
     $gtk.args.outputs.sprites << layer.grid_tiles.map do |tile|
@@ -11,7 +11,7 @@ module LDtk
         x: (tile.x - camera.x) * camera.scale,
         y: (tile.y - camera.y) * camera.scale,
         w: tile.w * camera.scale,
-        h: tile.w * camera.scale,
+        h: tile.h * camera.scale,
         path: tileset_path,
         source_x: tile.source_x,
         source_y: tile.source_y,
@@ -26,14 +26,17 @@ module LDtk
   def self.layer_as_rt(world, layer, rt_name)
     $gtk.args.render_target(rt_name).width = layer.cell_width * layer.grid_size 
     $gtk.args.render_target(rt_name).height = layer.cell_height * layer.grid_size
+
+    tileset_path = world.folder + layer.tileset_rel_path
+
     $gtk.args.render_target(rt_name).sprites << layer.grid_tiles.map do |tile|
-      tileset_path = world.folder + layer.tileset_rel_path
 
       {
         x: tile.x,
         y: tile.y,
         w: tile.w,
-        h: tile.w,
+        h: tile.h,
+
         path: tileset_path,
         source_x: tile.source_x,
         source_y: tile.source_y,
@@ -48,7 +51,7 @@ module LDtk
 
   # Render a layer in static_sprite with draw override
   # link to a camera
-  def self.render_layer_as_static(layer, camera)
+  def self.render_layer_as_static(layer, camera = DEFAULT_CAMERA)
     tileset_path = @folder + layer.tileset_rel_path
     $gtk.args.outputs.static_sprites << layer.grid_tiles.map do |tile|
       LDtkTile.new(tile, tileset_path, camera)
@@ -75,7 +78,7 @@ module LDtk
     end
   end
 
-  def self.render_debug_int_grid(world, level_name, layer_name, camera = {x: 0, y: 0, scale: 5 })
+  def self.render_debug_int_grid(world, level_name, layer_name, camera = DEFAULT_CAMERA)
     layer = layer(world, level_name, layer_name)
     color_definition = {
       1 => { r: 255, g: 0, b: 0 },
@@ -106,7 +109,7 @@ module LDtk
     end
   end
 
-  def self.drawable_entities(world, level_name, layer_name, camera = { x: 0, y: 0, scale: 5 })
+  def self.drawable_entities(world, level_name, layer_name, camera = DEFAULT_CAMERA)
     # cell_width = world.levels[level_name].layers[layer_name].cell_width
     # cell_height = world.levels[level_name].layers[layer_name].cell_height
     entities = world.levels[level_name].layers[layer_name].entities
