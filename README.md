@@ -4,7 +4,7 @@ A bridge between LDtk and DragonRuby
 
 ⚠️  construction in progress ⚠️  
 
-Documentation in progrss too !
+Documentation in progress too !
 
 
 ## Usage
@@ -67,6 +67,7 @@ Each layer is a hash with keys
      tileset_def_uid:   # Integer           definition id of the layer's tileset
      tileset_rel_path:  # String            relative path of tileset
      grid_tiles         # Array<Hash>       array of tiles's hash (dr friendly)
+     entities           # Array<Hash>       array of entity's hash 
      int_grid           # Array<Integer>    array of int in 'dr-friendly' orientation 
 }
 ```
