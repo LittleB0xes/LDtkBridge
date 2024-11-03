@@ -25,6 +25,7 @@ my_world is a `Hash` and has this structure :
 ```
 
 ### Loading Levels and Layers
+#### Level
 If in your LDtk file, your level is named "Level_1" in LDtk, LDtkBridge converts it to a symbol `:Level_1`.
 
 This level can be load like this
@@ -71,4 +72,28 @@ Each layer is a hash with keys
      int_grid           # Array<Integer>    array of int in 'dr-friendly' orientation 
 }
 ```
+
+### Tile Layer
+When the layer is a tiles layer (id `type: :Tiles), `grid_tiles` key link to an array of tile.
+LDtkBridge make DR friendly tiles (plus some useful fields). So tiles have this format :
+```ruby
+{
+    x:
+    y:
+    w:
+    h:
+    source_x:
+    source_y:
+    source_w:
+    source_h:
+    flip_horizontally:
+    flip_vertically:
+
+    tile_id:
+    enum_tags
+}
+```
+### Entities Layer
+
+### Int Grid Layer
 
