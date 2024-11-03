@@ -37,6 +37,8 @@ Each level is a hash with keys :
 ```ruby
 {
   identifier:       # Symbol        name of the level
+  uid:              # Integer       Unique integer identifier
+  iid:              # String        Unique instance identifier
   px_hei:           # Integer       height of the level in px,
   px_wid:           # Integer       width of the level in px,
   world_x:          # Integer       x position of the level in the world in px,
@@ -61,7 +63,7 @@ Each layer is a hash with keys
      identifier         # Symbol            name of the layer
      type:              # Symbol            Layer type
                         #                   (possible values: :IntGrid,:Entities, :Tiles or :AutoLayer)
-     iid:               # Integer
+     iid:               # String            Unique instance identifier
      tileset_def_uid:   # Integer           definition id of the layer's tileset
      tileset_rel_path:  # String            relative path of tileset
      grid_tiles         # Array<Hash>       array of tiles's hash (dr friendly)
