@@ -174,9 +174,24 @@ module LDtk
         end
         ]
         entity[:fields_type] = Hash[e['fieldInstances'].map do |f|
-          [f['__identifier'].to_sym, f['__type'].to_sym]
+          [f['__identifier'].to_sym, f['__type']]
         end
         ]
+
+
+        # In some case, fields needs to be rewrite
+        entity[:fields].each do |k, v|
+          if entity[:fields_type][k] == 'Array<Point>'
+            entity[:fields][k] = v.map do |point|
+              {
+                cx: point['cx'],
+                cy: layer.cell_height - point['cy'] - 1
+              }
+            end
+
+            # Perhaps other specific type later...
+          end
+        end
 
         # Set the tile rectangle if exist
         if e['__tile']
@@ -228,9 +243,10 @@ module LDtk
 
   # Return the relative path of a tileset
   # @return [String]
+  # @param world [Hash] LDtkBridge's world data
   # @param uid [Integer] uid of the tileset
-  def self.tileset_path(uid)
-    @folder + @definitions[:tilesets][uid][:rel_path]
+  def self.tileset_path(world, uid)
+    world.folder + world.definitions[:tilesets][uid][:rel_path]
   end
 
   # return all named entities
@@ -267,6 +283,7 @@ module LDtk
     }
 
   end
+  
 
   def self.entity_ref_field(world, entity_ref)
     level_identifier = world.levels
